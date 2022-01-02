@@ -1,7 +1,7 @@
 import React from 'react'
 import Identicon from 'identicon.js'
 
-const Main = () => {
+const Main = ({ captureFile }) => {
   return (
     <div className='container-fluid mt-5'>
       <div className='row'>
@@ -23,6 +23,7 @@ const Main = () => {
                   id='image'
                   className='form-control-file'
                   required
+                  onChange={captureFile}
                 />
               </div>
               <div className='form-group'>

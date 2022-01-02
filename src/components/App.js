@@ -11,11 +11,21 @@ const App = () => {
   const [account, setAccount] = React.useState('')
   const [decentragram, setDecentragram] = React.useState(null)
   const [imageCount, setImageCount] = React.useState(0)
+  const [image, setImage] = React.useState('')
 
   React.useEffect(() => {
     loadWeb3()
     loadBlockChain()
   }, [])
+
+  const captureFile = (event) => {
+    const file = event.target.files[0]
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onloadend = () => {
+      setImage(Buffer(reader.result))
+    }
+  }
 
   const loadWeb3 = async () => {
     if (window.ethereum) {
@@ -58,9 +68,7 @@ const App = () => {
           <p>Loading...</p>
         </div>
       ) : (
-        <Main
-        // Code...
-        />
+        <Main captureFile={captureFile} />
       )}
     </div>
   )
