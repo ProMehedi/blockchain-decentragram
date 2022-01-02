@@ -43,7 +43,7 @@ const App = () => {
         networkData.address
       )
       setDecentragram(contractData)
-      setImageCount(await contractData.methods.getImageCount().call())
+      setImageCount(await contractData.methods.imageCount().call())
       setLoading(false)
     } else {
       window.alert('Smart contract not deployed to detected network.')
