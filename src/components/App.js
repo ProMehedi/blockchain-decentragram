@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Web3 from 'web3'
 import Identicon from 'identicon.js'
 import './App.css'
@@ -7,12 +7,14 @@ import Navbar from './Navbar'
 import Main from './Main'
 
 const App = () => {
-  const [account, setAccount] = React.useState('')
   const [loading, setLoading] = React.useState(false)
+  const [account, setAccount] = React.useState('')
+  const [decentragram, setDecentragram] = React.useState(null)
+  const [imageCount, setImageCount] = React.useState(0)
 
   React.useEffect(() => {
     loadWeb3()
-    loadAccount()
+    loadBlockChain()
   }, [])
 
   const loadWeb3 = async () => {
@@ -28,10 +30,24 @@ const App = () => {
     }
   }
 
-  const loadAccount = async () => {
+  const loadBlockChain = async () => {
+    setLoading(true)
     const accounts = await window.web3.eth.getAccounts()
-    console.log(accounts)
     setAccount(accounts[0])
+
+    const networkId = await window.web3.eth.net.getId()
+    const networkData = Decentragram.networks[networkId]
+    if (networkData) {
+      const contractData = new window.web3.eth.Contract(
+        Decentragram.abi,
+        networkData.address
+      )
+      setDecentragram(contractData)
+      setImageCount(await contractData.methods.getImageCount().call())
+      setLoading(false)
+    } else {
+      window.alert('Smart contract not deployed to detected network.')
+    }
   }
 
   return (
