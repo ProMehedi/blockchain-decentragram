@@ -37,7 +37,7 @@ contract('Decentragram', ([deployer, author, tipper]) => {
       imageCount = await decentragram.imageCount()
     })
 
-    //   //check event
+    //check event
     it('creates images', async () => {
       // SUCESS
       assert.equal(imageCount, 1)
@@ -59,19 +59,20 @@ contract('Decentragram', ([deployer, author, tipper]) => {
         .be.rejected
     })
 
-    //   //check from Struct
-    //   it('lists images', async () => {
-    //     const image = await decentragram.images(imageCount)
-    //     assert.equal(image.id.toNumber(), imageCount.toNumber(), 'id is correct')
-    //     assert.equal(image.hash, hash, 'Hash is correct')
-    //     assert.equal(
-    //       image.description,
-    //       'Image description',
-    //       'description is correct'
-    //     )
-    //     assert.equal(image.tipAmount, '0', 'tip amount is correct')
-    //     assert.equal(image.author, author, 'author is correct')
-    //   })
+    //check from Struct
+    it('lists images', async () => {
+      const image = await decentragram.images(imageCount)
+      assert.equal(image.id.toNumber(), imageCount.toNumber(), 'id is correct')
+      assert.equal(image.hash, hash, 'Hash is correct')
+      assert.equal(
+        image.description,
+        'Image description',
+        'description is correct'
+      )
+      assert.equal(image.tipAmount, '0', 'tip amount is correct')
+      assert.equal(image.author, author, 'author is correct')
+    })
+
     //   it('allows users to tip images', async () => {
     //     // Track the author balance before purchase
     //     let oldAuthorBalance

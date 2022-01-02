@@ -16,10 +16,19 @@ contract Decentragram {
     address payable author;
   }
 
+  // Events
+  event ImageCreated(uint indexed id, string hash, string description, uint tipAmount, address payable author);
+
   // Upload Images
   function uploadImage(string memory _hash, string memory _description) public {
+    require(bytes(_description).length> 0);
+    require(bytes(_hash).length > 0);
+    require(msg.sender != address(0));
+
     imageCount++;
     images[imageCount] = Image(imageCount, _hash, _description, 0, payable(msg.sender));
+
+    emit ImageCreated(imageCount, _hash, _description, 0, payable(msg.sender));
   }
   
 }
