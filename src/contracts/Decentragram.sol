@@ -2,5 +2,5 @@
 pragma solidity ^0.8.0;
 
 contract Decentragram {
-  // Code goes here...
+  string public name = "Decentragram";
 }
