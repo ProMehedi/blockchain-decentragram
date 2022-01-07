@@ -43,7 +43,7 @@ const App = () => {
 
   const uploadImage = (event) => {
     event.preventDefault()
-
+    console.log(desc)
     setUploading(true)
 
     // Adding image to IPFS
@@ -102,7 +102,7 @@ const App = () => {
   }
 
   const getImages = async () => {
-    for (let i = 0; i < imageCount; i++) {
+    for (let i = 1; i <= imageCount; i++) {
       const _image = await decentragram.methods.images(i).call()
       setImages((prev) => [...prev, _image])
     }
