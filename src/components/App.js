@@ -5,6 +5,7 @@ import './App.css'
 import Decentragram from '../abis/Decentragram.json'
 import Navbar from './Navbar'
 import Main from './Main'
+import { ScaleLoader } from 'react-spinners'
 
 const ipfs = ipfsClient({
   host: 'ipfs.infura.io',
@@ -14,6 +15,7 @@ const ipfs = ipfsClient({
 
 const App = () => {
   const [loading, setLoading] = React.useState(false)
+  const [uploading, setUploading] = React.useState(false)
   const [account, setAccount] = React.useState('')
   const [decentragram, setDecentragram] = React.useState(null)
   const [imageCount, setImageCount] = React.useState(0)
@@ -42,9 +44,10 @@ const App = () => {
   const uploadImage = (event) => {
     event.preventDefault()
 
+    setUploading(true)
+
     // Adding image to IPFS
     ipfs.add(image, (error, result) => {
-      setLoading(true)
       if (error) {
         console.error(error)
         return
@@ -55,8 +58,8 @@ const App = () => {
         .send({ from: account })
         .on('transactionHash', (hash) => {
           console.log('transaction hash:', hash)
+          setUploading(false)
         })
-      setLoading(false)
     })
   }
 
@@ -105,15 +108,12 @@ const App = () => {
     }
   }
 
-  console.log(imageCount)
-  console.log(images)
-
   return (
     <div>
       <Navbar account={account} />
       {loading ? (
-        <div id='loader' className='text-center mt-5'>
-          <p>Loading...</p>
+        <div id='loader'>
+          <ScaleLoader color='#0669ad' />
         </div>
       ) : (
         <Main
@@ -122,6 +122,7 @@ const App = () => {
           desc={desc}
           setDesc={setDesc}
           images={images}
+          loading={uploading}
         />
       )}
     </div>
