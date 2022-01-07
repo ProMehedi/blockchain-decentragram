@@ -1,7 +1,6 @@
 import React from 'react'
 import Web3 from 'web3'
 import ipfsClient from 'ipfs-http-client'
-import Identicon from 'identicon.js'
 import './App.css'
 import Decentragram from '../abis/Decentragram.json'
 import Navbar from './Navbar'
