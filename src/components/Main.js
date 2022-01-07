@@ -1,7 +1,7 @@
 import React from 'react'
 import Identicon from 'identicon.js'
 
-const Main = ({ captureFile }) => {
+const Main = ({ captureFile, uploadImage, desc, setDesc }) => {
   return (
     <div className='container-fluid mt-5'>
       <div className='row'>
@@ -14,9 +14,9 @@ const Main = ({ captureFile }) => {
             <p>&nbsp;</p>
             <h1 className='mb-4'>Share Image!</h1>
 
-            <form>
+            <form onSubmit={uploadImage}>
               <div className='form-group'>
-                <label for='image'>Choose an image:</label>
+                <label htmlFor='image'>Choose an image:</label>
                 <input
                   type='file'
                   accept='.jpg, .png, .bmp, .gif'
@@ -27,13 +27,15 @@ const Main = ({ captureFile }) => {
                 />
               </div>
               <div className='form-group'>
-                <label for='desc'>Choose Description:</label>
+                <label htmlFor='desc'>Choose Description:</label>
                 <input
                   type='text'
                   id='desc'
                   className='form-control'
                   placeholder='Your description'
                   required
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
                 />
               </div>
               <button

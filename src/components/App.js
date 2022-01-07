@@ -1,10 +1,17 @@
 import React from 'react'
 import Web3 from 'web3'
+import ipfsClient from 'ipfs-http-client'
 import Identicon from 'identicon.js'
 import './App.css'
 import Decentragram from '../abis/Decentragram.json'
 import Navbar from './Navbar'
 import Main from './Main'
+
+const ipfs = ipfsClient({
+  host: 'ipfs.infura.io',
+  port: 5001,
+  protocol: 'https',
+})
 
 const App = () => {
   const [loading, setLoading] = React.useState(false)
@@ -12,6 +19,7 @@ const App = () => {
   const [decentragram, setDecentragram] = React.useState(null)
   const [imageCount, setImageCount] = React.useState(0)
   const [image, setImage] = React.useState('')
+  const [desc, setDesc] = React.useState('')
 
   React.useEffect(() => {
     loadWeb3()
@@ -25,6 +33,29 @@ const App = () => {
     reader.onloadend = () => {
       setImage(Buffer(reader.result))
     }
+  }
+
+  const uploadImage = (event) => {
+    event.preventDefault()
+    console.log('uploading image...')
+
+    // Adding image to IPFS
+    ipfs.add(image, (error, result) => {
+      setLoading(true)
+      console.log('Result:', result)
+      if (error) {
+        console.error(error)
+        return
+      }
+
+      decentragram.methods
+        .uploadImage(result[0].hash, desc)
+        .send({ from: account })
+        .on('transactionHash', (hash) => {
+          console.log('transaction hash:', hash)
+        })
+      setLoading(false)
+    })
   }
 
   const loadWeb3 = async () => {
@@ -60,6 +91,9 @@ const App = () => {
     }
   }
 
+  console.log(image)
+  console.log(decentragram)
+
   return (
     <div>
       <Navbar account={account} />
@@ -68,7 +102,12 @@ const App = () => {
           <p>Loading...</p>
         </div>
       ) : (
-        <Main captureFile={captureFile} />
+        <Main
+          captureFile={captureFile}
+          uploadImage={uploadImage}
+          desc={desc}
+          setDesc={setDesc}
+        />
       )}
     </div>
   )
