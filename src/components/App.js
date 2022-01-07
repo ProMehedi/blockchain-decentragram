@@ -19,12 +19,17 @@ const App = () => {
   const [decentragram, setDecentragram] = React.useState(null)
   const [imageCount, setImageCount] = React.useState(0)
   const [image, setImage] = React.useState('')
+  const [images, setImages] = React.useState([])
   const [desc, setDesc] = React.useState('')
 
   React.useEffect(() => {
     loadWeb3()
     loadBlockChain()
   }, [])
+
+  React.useEffect(() => {
+    getImages()
+  }, [imageCount])
 
   const captureFile = (event) => {
     const file = event.target.files[0]
@@ -37,12 +42,10 @@ const App = () => {
 
   const uploadImage = (event) => {
     event.preventDefault()
-    console.log('uploading image...')
 
     // Adding image to IPFS
     ipfs.add(image, (error, result) => {
       setLoading(true)
-      console.log('Result:', result)
       if (error) {
         console.error(error)
         return
@@ -73,26 +76,38 @@ const App = () => {
 
   const loadBlockChain = async () => {
     setLoading(true)
-    const accounts = await window.web3.eth.getAccounts()
+
+    const web3 = window.web3
+    const accounts = await web3.eth.getAccounts()
     setAccount(accounts[0])
 
-    const networkId = await window.web3.eth.net.getId()
+    const networkId = await web3.eth.net.getId()
     const networkData = Decentragram.networks[networkId]
     if (networkData) {
-      const contractData = new window.web3.eth.Contract(
+      const contractData = new web3.eth.Contract(
         Decentragram.abi,
         networkData.address
       )
       setDecentragram(contractData)
-      setImageCount(await contractData.methods.imageCount().call())
+
+      const _imageCount = await contractData.methods.imageCount().call()
+      setImageCount(Number(_imageCount.toString()))
+
       setLoading(false)
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
   }
 
-  console.log(image)
-  console.log(decentragram)
+  const getImages = async () => {
+    for (let i = 0; i < imageCount; i++) {
+      const _image = await decentragram.methods.images(i).call()
+      setImages((prev) => [...prev, _image])
+    }
+  }
+
+  console.log(imageCount)
+  console.log(images)
 
   return (
     <div>
@@ -107,6 +122,7 @@ const App = () => {
           uploadImage={uploadImage}
           desc={desc}
           setDesc={setDesc}
+          images={images}
         />
       )}
     </div>
