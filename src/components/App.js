@@ -102,10 +102,15 @@ const App = () => {
   }
 
   const getImages = async () => {
+    const _images = []
     for (let i = 1; i <= imageCount; i++) {
       const _image = await decentragram.methods.images(i).call()
-      setImages((prev) => [...prev, _image])
+      _images.push(_image)
     }
+
+    // Show highest tipped image first
+    const sortedImages = _images.sort((a, b) => b.tipAmount - a.tipAmount)
+    setImages(sortedImages)
   }
 
   const tipImageOwner = async (id, amount) => {
