@@ -2,7 +2,15 @@ import React from 'react'
 import ImgCard from './ImgCard'
 import { ScaleLoader } from 'react-spinners'
 
-const Main = ({ captureFile, uploadImage, desc, setDesc, images, loading }) => {
+const Main = ({
+  captureFile,
+  uploadImage,
+  desc,
+  setDesc,
+  images,
+  loading,
+  tipImageOwner,
+}) => {
   return (
     <div className='container-fluid mt-5'>
       <div className='row'>
@@ -59,7 +67,11 @@ const Main = ({ captureFile, uploadImage, desc, setDesc, images, loading }) => {
 
             {images &&
               images.map((image, index) => (
-                <ImgCard key={index} image={image} />
+                <ImgCard
+                  key={index}
+                  image={image}
+                  tipImageOwner={tipImageOwner}
+                />
               ))}
           </div>
         </main>

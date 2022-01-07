@@ -30,7 +30,7 @@ const App = () => {
 
   React.useEffect(() => {
     getImages()
-  }, [imageCount])
+  }, [imageCount, decentragram])
 
   const captureFile = (event) => {
     const file = event.target.files[0]
@@ -108,6 +108,17 @@ const App = () => {
     }
   }
 
+  const tipImageOwner = async (id, amount) => {
+    setLoading(true)
+    decentragram.methods
+      .tipImageOwner(id)
+      .send({ from: account, value: amount })
+      .on('transactionHash', (hash) => {
+        console.log('transaction hash:', hash)
+        setLoading(false)
+      })
+  }
+
   return (
     <div>
       <Navbar account={account} />
@@ -123,6 +134,7 @@ const App = () => {
           setDesc={setDesc}
           images={images}
           loading={uploading}
+          tipImageOwner={tipImageOwner}
         />
       )}
     </div>

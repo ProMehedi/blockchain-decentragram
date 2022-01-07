@@ -1,7 +1,7 @@
 import React from 'react'
 import Identicon from 'identicon.js'
 
-const ImgCard = ({ image }) => {
+const ImgCard = ({ image, tipImageOwner }) => {
   return (
     <div className='card mb-4'>
       <div className='card-header'>
@@ -39,7 +39,7 @@ const ImgCard = ({ image }) => {
             onClick={(event) => {
               let tipAmount = window.web3.utils.toWei('0.1', 'Ether')
               console.log(event.target.name, tipAmount)
-              this.props.tipImageOwner(event.target.name, tipAmount)
+              tipImageOwner(event.target.name, tipAmount)
             }}
           >
             TIP 0.1 ETH
