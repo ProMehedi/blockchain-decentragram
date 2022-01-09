@@ -1,8 +1,9 @@
 {
-  "name": "name...",
-  "version": "0.1.0",
-  "description": "description...",
-  "author": "gregory@dappuniversity.com",
+  "name": "decentragram",
+  "version": "1.0.0",
+  "description": "Instagram clone with blockchain technology",
+  "author": "Mehedi Hasan",
+  "license": "MIT",
   "dependencies": {
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
@@ -26,7 +27,6 @@
     "truffle-hdwallet-provider-privkey": "^0.3.0",
     "web3": "1.0.0-beta.55"
   },
-  "homepage": "http://dappuniversity.github.io/decentragram",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
