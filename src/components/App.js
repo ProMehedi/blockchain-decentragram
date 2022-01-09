@@ -43,24 +43,28 @@ const App = () => {
 
   const uploadImage = (event) => {
     event.preventDefault()
-    console.log(desc)
     setUploading(true)
 
-    // Adding image to IPFS
-    ipfs.add(image, (error, result) => {
-      if (error) {
-        console.error(error)
-        return
-      }
+    try {
+      // Adding image to IPFS
+      ipfs.add(image, (error, result) => {
+        if (error) {
+          console.error(error)
+          return
+        }
 
-      decentragram.methods
-        .uploadImage(result[0].hash, desc)
-        .send({ from: account })
-        .on('transactionHash', (hash) => {
-          console.log('transaction hash:', hash)
-          setUploading(false)
-        })
-    })
+        decentragram.methods
+          .uploadImage(result[0].hash, desc)
+          .send({ from: account })
+          .on('transactionHash', (hash) => {
+            console.log('transaction hash:', hash)
+            setUploading(false)
+          })
+      })
+    } catch (error) {
+      console.error(error.message)
+      setUploading(false)
+    }
   }
 
   const loadWeb3 = async () => {
@@ -115,13 +119,19 @@ const App = () => {
 
   const tipImageOwner = async (id, amount) => {
     setLoading(true)
-    decentragram.methods
-      .tipImageOwner(id)
-      .send({ from: account, value: amount })
-      .on('transactionHash', (hash) => {
-        console.log('transaction hash:', hash)
-        setLoading(false)
-      })
+
+    try {
+      decentragram.methods
+        .tipImageOwner(id)
+        .send({ from: account, value: amount })
+        .on('transactionHash', (hash) => {
+          console.log('transaction hash:', hash)
+          setLoading(false)
+        })
+    } catch (error) {
+      setLoading(false)
+      console.log(error.message)
+    }
   }
 
   return (
